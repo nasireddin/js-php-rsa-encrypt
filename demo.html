@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>JSEncrypt Example</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript" src="/wordpress/myfile/jsencrypt.js"></script>
+  <script type="text/javascript" src="/wordpress/myfile/jquery-1.3.2.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <script type="text/javascript">
+function do_encrypt() {
+      var encrypt = new JSEncrypt();
+      encrypt.setPublicKey($('#pubkey').val());
+      var encrypted = encrypt.encrypt($('#input').val());
+
+      // Decrypt with the private key...
+      var decrypt = new JSEncrypt();
+      decrypt.setPrivateKey($('#privkey').val());
+      var uncrypted = decrypt.decrypt(encrypted);
+
+	var $bstr1=decrypt.encrypt($('#input').val());
+	var $bstr2=encrypt.decrypt($bstr1);
+
+      // Now a simple check to see if the round-trip worked.
+      if (uncrypted == $('#input').val()) {
+		  $('#pubkeyencode').val(encrypted);
+		  $('#privkeydecode').val(uncrypted);
+		  $('#privkeyencode').val($bstr1);
+		  $('#pubkeydecode').val($bstr2);
+      }
+      else {
+        alert('Something went wrong....');
+      }
+}
+function newkeys() {
+	var crypt = new JSEncrypt({default_key_size: 1024});
+	crypt.getKey();
+	$('#privkey').val(crypt.getPrivateKey());
+	$('#pubkey').val(crypt.getPublicKey());
+}
+</script>
+<label for="privkey">Private Key</label><br/>
+<textarea id="privkey" rows="15" cols="65">-----BEGIN RSA PRIVATE KEY-----
+MIICXQIBAAKBgQDlOJu6TyygqxfWT7eLtGDwajtNFOb9I5XRb6khyfD1Yt3YiCgQ
+WMNW649887VGJiGr/L5i2osbl8C9+WJTeucF+S76xFxdU6jE0NQ+Z+zEdhUTooNR
+aY5nZiu5PgDB0ED/ZKBUSLKL7eibMxZtMlUDHjm4gwQco1KRMDSmXSMkDwIDAQAB
+AoGAfY9LpnuWK5Bs50UVep5c93SJdUi82u7yMx4iHFMc/Z2hfenfYEzu+57fI4fv
+xTQ//5DbzRR/XKb8ulNv6+CHyPF31xk7YOBfkGI8qjLoq06V+FyBfDSwL8KbLyeH
+m7KUZnLNQbk8yGLzB3iYKkRHlmUanQGaNMIJziWOkN+N9dECQQD0ONYRNZeuM8zd
+8XJTSdcIX4a3gy3GGCJxOzv16XHxD03GW6UNLmfPwenKu+cdrQeaqEixrCejXdAF
+z/7+BSMpAkEA8EaSOeP5Xr3ZrbiKzi6TGMwHMvC7HdJxaBJbVRfApFrE0/mPwmP5
+rN7QwjrMY+0+AbXcm8mRQyQ1+IGEembsdwJBAN6az8Rv7QnD/YBvi52POIlRSSIM
+V7SwWvSK4WSMnGb1ZBbhgdg57DXaspcwHsFV7hByQ5BvMtIduHcT14ECfcECQATe
+aTgjFnqE/lQ22Rk0eGaYO80cc643BXVGafNfd9fcvwBMnk0iGX0XRsOozVt5Azil
+psLBYuApa66NcVHJpCECQQDTjI2AQhFc1yRnCU/YgDnSpJVm1nASoRUnU8Jfm3Oz
+uku7JUXcVpt08DFSceCEX9unCuMcT72rAQlLpdZir876
+-----END RSA PRIVATE KEY-----</textarea><br/>
+<label for="pubkey">Public Key</label><br/>
+<textarea id="pubkey" rows="8" cols="65">-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDlOJu6TyygqxfWT7eLtGDwajtN
+FOb9I5XRb6khyfD1Yt3YiCgQWMNW649887VGJiGr/L5i2osbl8C9+WJTeucF+S76
+xFxdU6jE0NQ+Z+zEdhUTooNRaY5nZiu5PgDB0ED/ZKBUSLKL7eibMxZtMlUDHjm4
+gwQco1KRMDSmXSMkDwIDAQAB
+-----END PUBLIC KEY-----</textarea><br/>
+<input id="testme" type="button" onClick="newkeys();" value="Get New Keys" /><br/>
+<label for="input">Text to encrypt:</label><br/>
+<textarea id="input" name="input" type="text" rows=4 cols=70>This is a test!</textarea><br/>
+<input id="testme" type="button" onClick="do_encrypt();" value="Test Me!!!" /><br/>
+<label for="pubkey">Public Key Encode</label><br/>
+<textarea id="pubkeyencode" rows="5" cols="65"></textarea><br/>
+<label for="pubkey">Private Key decode</label><br/>
+<textarea id="privkeydecode" rows="5" cols="65"></textarea><br/>
+
+<label for="pubkey">Private Key Encode</label><br/>
+<textarea id="privkeyencode" rows="5" cols="65"></textarea><br/>
+<label for="pubkey">Public Key decode</label><br/>
+<textarea id="pubkeydecode" rows="5" cols="65"></textarea><br/>
+</div>
+</body>
+</html>
